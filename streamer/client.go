@@ -1,4 +1,4 @@
-package pingpong
+package streamer
 
 import (
 	"context"
