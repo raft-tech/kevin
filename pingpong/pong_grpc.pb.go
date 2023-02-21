@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PongServiceClient interface {
-	SayHello(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error)
+	SayPong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error)
 }
 
 type pongServiceClient struct {
@@ -34,9 +34,9 @@ func NewPongServiceClient(cc grpc.ClientConnInterface) PongServiceClient {
 	return &pongServiceClient{cc}
 }
 
-func (c *pongServiceClient) SayHello(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error) {
+func (c *pongServiceClient) SayPong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error) {
 	out := new(Pong)
-	err := c.cc.Invoke(ctx, "/pingpong.PongService/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pingpong.PongService/SayPong", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *pongServiceClient) SayHello(ctx context.Context, in *emptypb.Empty, opt
 // All implementations must embed UnimplementedPongServiceServer
 // for forward compatibility
 type PongServiceServer interface {
-	SayHello(context.Context, *emptypb.Empty) (*Pong, error)
+	SayPong(context.Context, *emptypb.Empty) (*Pong, error)
 	mustEmbedUnimplementedPongServiceServer()
 }
 
@@ -55,8 +55,8 @@ type PongServiceServer interface {
 type UnimplementedPongServiceServer struct {
 }
 
-func (UnimplementedPongServiceServer) SayHello(context.Context, *emptypb.Empty) (*Pong, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (UnimplementedPongServiceServer) SayPong(context.Context, *emptypb.Empty) (*Pong, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SayPong not implemented")
 }
 func (UnimplementedPongServiceServer) mustEmbedUnimplementedPongServiceServer() {}
 
@@ -71,20 +71,20 @@ func RegisterPongServiceServer(s grpc.ServiceRegistrar, srv PongServiceServer) {
 	s.RegisterService(&PongService_ServiceDesc, srv)
 }
 
-func _PongService_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PongService_SayPong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PongServiceServer).SayHello(ctx, in)
+		return srv.(PongServiceServer).SayPong(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pingpong.PongService/SayHello",
+		FullMethod: "/pingpong.PongService/SayPong",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PongServiceServer).SayHello(ctx, req.(*emptypb.Empty))
+		return srv.(PongServiceServer).SayPong(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -97,8 +97,8 @@ var PongService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PongServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _PongService_SayHello_Handler,
+			MethodName: "SayPong",
+			Handler:    _PongService_SayPong_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -5,7 +5,7 @@ package pingpong;
 option go_package = "./";
 
 service PongService {
-    rpc SayHello(google.protobuf.Empty) returns(Pong) {}
+    rpc SayPong(google.protobuf.Empty) returns(Pong) {}
 }
 
 message Ping {

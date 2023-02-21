@@ -10,7 +10,7 @@ type Server struct {
 	UnimplementedPongServiceServer
 }
 
-func (S *Server) SayHello(context.Context, *emptypb.Empty) (*Pong, error) {
+func (S *Server) SayPong(context.Context, *emptypb.Empty) (*Pong, error) {
 	return &Pong{Pong: "Pong"}, nil
 
 }
