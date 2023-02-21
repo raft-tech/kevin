@@ -1,0 +1,17 @@
+syntax = "proto3";
+package streamer;
+
+
+option go_package = "./";
+
+service StreamService {
+  rpc FetchResponse (Request) returns (stream Response) {}
+}
+
+message Request {
+  string request = 1;
+}
+
+message Response {
+  string result = 1;
+}
