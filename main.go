@@ -2,6 +2,7 @@ package main
 
 import (
 	"kevin/pingpong"
+	"kevin/streamer"
 	"log"
 	"net"
 
@@ -16,6 +17,7 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 	pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
+	streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
 	reflection.Register(grpcServer)
 
 	if err := grpcServer.Serve(lis); err != nil {
