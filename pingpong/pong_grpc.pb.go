@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.12
-// source: pong.proto
+// source: pingpong/pong.proto
 
 package pingpong
 
@@ -36,7 +36,7 @@ func NewPongServiceClient(cc grpc.ClientConnInterface) PongServiceClient {
 
 func (c *pongServiceClient) SayHello(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error) {
 	out := new(Pong)
-	err := c.cc.Invoke(ctx, "/chat.PongService/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pingpong.PongService/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func _PongService_SayHello_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/chat.PongService/SayHello",
+		FullMethod: "/pingpong.PongService/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PongServiceServer).SayHello(ctx, req.(*emptypb.Empty))
@@ -93,7 +93,7 @@ func _PongService_SayHello_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PongService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "chat.PongService",
+	ServiceName: "pingpong.PongService",
 	HandlerType: (*PongServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -102,5 +102,5 @@ var PongService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pong.proto",
+	Metadata: "pingpong/pong.proto",
 }

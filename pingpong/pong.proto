@@ -1,6 +1,6 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-package chat;
+package pingpong;
 
 option go_package = "./";
 

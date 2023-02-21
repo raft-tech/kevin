@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.21.12
-// source: pong.proto
+// source: pingpong/pong.proto
 
 package pingpong
 
@@ -32,7 +32,7 @@ type Ping struct {
 func (x *Ping) Reset() {
 	*x = Ping{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_pong_proto_msgTypes[0]
+		mi := &file_pingpong_pong_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -45,7 +45,7 @@ func (x *Ping) String() string {
 func (*Ping) ProtoMessage() {}
 
 func (x *Ping) ProtoReflect() protoreflect.Message {
-	mi := &file_pong_proto_msgTypes[0]
+	mi := &file_pingpong_pong_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *Ping) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Ping.ProtoReflect.Descriptor instead.
 func (*Ping) Descriptor() ([]byte, []int) {
-	return file_pong_proto_rawDescGZIP(), []int{0}
+	return file_pingpong_pong_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Ping) GetPing() string {
@@ -79,7 +79,7 @@ type Pong struct {
 func (x *Pong) Reset() {
 	*x = Pong{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_pong_proto_msgTypes[1]
+		mi := &file_pingpong_pong_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -92,7 +92,7 @@ func (x *Pong) String() string {
 func (*Pong) ProtoMessage() {}
 
 func (x *Pong) ProtoReflect() protoreflect.Message {
-	mi := &file_pong_proto_msgTypes[1]
+	mi := &file_pingpong_pong_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -105,7 +105,7 @@ func (x *Pong) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pong.ProtoReflect.Descriptor instead.
 func (*Pong) Descriptor() ([]byte, []int) {
-	return file_pong_proto_rawDescGZIP(), []int{1}
+	return file_pingpong_pong_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Pong) GetPong() string {
@@ -115,44 +115,45 @@ func (x *Pong) GetPong() string {
 	return ""
 }
 
-var File_pong_proto protoreflect.FileDescriptor
+var File_pingpong_pong_proto protoreflect.FileDescriptor
 
-var file_pong_proto_rawDesc = []byte{
-	0x0a, 0x0a, 0x70, 0x6f, 0x6e, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x04, 0x63, 0x68,
-	0x61, 0x74, 0x1a, 0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0x1a, 0x0a, 0x04, 0x50, 0x69, 0x6e, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x69, 0x6e, 0x67, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x69, 0x6e, 0x67, 0x22, 0x1a, 0x0a, 0x04, 0x50,
-	0x6f, 0x6e, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x70, 0x6f, 0x6e, 0x67, 0x32, 0x3f, 0x0a, 0x0b, 0x50, 0x6f, 0x6e, 0x67, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x30, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c,
-	0x6c, 0x6f, 0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0a, 0x2e, 0x63, 0x68, 0x61,
-	0x74, 0x2e, 0x50, 0x6f, 0x6e, 0x67, 0x22, 0x00, 0x42, 0x04, 0x5a, 0x02, 0x2e, 0x2f, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+var file_pingpong_pong_proto_rawDesc = []byte{
+	0x0a, 0x13, 0x70, 0x69, 0x6e, 0x67, 0x70, 0x6f, 0x6e, 0x67, 0x2f, 0x70, 0x6f, 0x6e, 0x67, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x70, 0x69, 0x6e, 0x67, 0x70, 0x6f, 0x6e, 0x67, 0x1a,
+	0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x1a, 0x0a, 0x04,
+	0x50, 0x69, 0x6e, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x70, 0x69, 0x6e, 0x67, 0x22, 0x1a, 0x0a, 0x04, 0x50, 0x6f, 0x6e, 0x67,
+	0x12, 0x12, 0x0a, 0x04, 0x70, 0x6f, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x70, 0x6f, 0x6e, 0x67, 0x32, 0x43, 0x0a, 0x0b, 0x50, 0x6f, 0x6e, 0x67, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x12, 0x34, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12,
+	0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
+	0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0e, 0x2e, 0x70, 0x69, 0x6e, 0x67, 0x70, 0x6f,
+	0x6e, 0x67, 0x2e, 0x50, 0x6f, 0x6e, 0x67, 0x22, 0x00, 0x42, 0x04, 0x5a, 0x02, 0x2e, 0x2f, 0x62,
+	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_pong_proto_rawDescOnce sync.Once
-	file_pong_proto_rawDescData = file_pong_proto_rawDesc
+	file_pingpong_pong_proto_rawDescOnce sync.Once
+	file_pingpong_pong_proto_rawDescData = file_pingpong_pong_proto_rawDesc
 )
 
-func file_pong_proto_rawDescGZIP() []byte {
-	file_pong_proto_rawDescOnce.Do(func() {
-		file_pong_proto_rawDescData = protoimpl.X.CompressGZIP(file_pong_proto_rawDescData)
+func file_pingpong_pong_proto_rawDescGZIP() []byte {
+	file_pingpong_pong_proto_rawDescOnce.Do(func() {
+		file_pingpong_pong_proto_rawDescData = protoimpl.X.CompressGZIP(file_pingpong_pong_proto_rawDescData)
 	})
-	return file_pong_proto_rawDescData
+	return file_pingpong_pong_proto_rawDescData
 }
 
-var file_pong_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_pong_proto_goTypes = []interface{}{
-	(*Ping)(nil),          // 0: chat.Ping
-	(*Pong)(nil),          // 1: chat.Pong
+var file_pingpong_pong_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_pingpong_pong_proto_goTypes = []interface{}{
+	(*Ping)(nil),          // 0: pingpong.Ping
+	(*Pong)(nil),          // 1: pingpong.Pong
 	(*emptypb.Empty)(nil), // 2: google.protobuf.Empty
 }
-var file_pong_proto_depIdxs = []int32{
-	2, // 0: chat.PongService.SayHello:input_type -> google.protobuf.Empty
-	1, // 1: chat.PongService.SayHello:output_type -> chat.Pong
+var file_pingpong_pong_proto_depIdxs = []int32{
+	2, // 0: pingpong.PongService.SayHello:input_type -> google.protobuf.Empty
+	1, // 1: pingpong.PongService.SayHello:output_type -> pingpong.Pong
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -160,13 +161,13 @@ var file_pong_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_pong_proto_init() }
-func file_pong_proto_init() {
-	if File_pong_proto != nil {
+func init() { file_pingpong_pong_proto_init() }
+func file_pingpong_pong_proto_init() {
+	if File_pingpong_pong_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_pong_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_pingpong_pong_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Ping); i {
 			case 0:
 				return &v.state
@@ -178,7 +179,7 @@ func file_pong_proto_init() {
 				return nil
 			}
 		}
-		file_pong_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_pingpong_pong_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Pong); i {
 			case 0:
 				return &v.state
@@ -195,18 +196,18 @@ func file_pong_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_pong_proto_rawDesc,
+			RawDescriptor: file_pingpong_pong_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_pong_proto_goTypes,
-		DependencyIndexes: file_pong_proto_depIdxs,
-		MessageInfos:      file_pong_proto_msgTypes,
+		GoTypes:           file_pingpong_pong_proto_goTypes,
+		DependencyIndexes: file_pingpong_pong_proto_depIdxs,
+		MessageInfos:      file_pingpong_pong_proto_msgTypes,
 	}.Build()
-	File_pong_proto = out.File
-	file_pong_proto_rawDesc = nil
-	file_pong_proto_goTypes = nil
-	file_pong_proto_depIdxs = nil
+	File_pingpong_pong_proto = out.File
+	file_pingpong_pong_proto_rawDesc = nil
+	file_pingpong_pong_proto_goTypes = nil
+	file_pingpong_pong_proto_depIdxs = nil
 }
