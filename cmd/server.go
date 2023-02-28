@@ -1,23 +1,23 @@
 /*
 Copyright © 2023 Raft LLC
-
 */
 package cmd
 
 import (
-    "kevin/pingpong"
-    "kevin/streamer"
+	"kevin/pingpong"
+	"kevin/streamer"
+	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 
+	"fmt"
 	"log"
 	"net"
-	"fmt"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
-
-
 
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
@@ -29,24 +29,29 @@ Services currently available:
 - pingpong.PongService SayPong
 - streamer.StreamService FetchResponse`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-	    port, _ := cmd.Flags().GetString("port")
+		port, _ := cmd.Flags().GetString("port")
 		log.Printf("starting Kevin gRPC services on port %s...", port)
-        lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
-        if err != nil {
-            return err
-        }
-        grpcServer := grpc.NewServer()
-        pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
-        streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
-        reflection.Register(grpcServer)
-
-        if err := grpcServer.Serve(lis); err != nil {
-            return err
-        }
-		return nil
+		lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
+		if err != nil {
+			return err
+		}
+		grpcServer := grpc.NewServer()
+		pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
+		streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
+		reflection.Register(grpcServer)
+	}
+		// Do a go routine with prometheus metrics 
+		func prometheus () {
+			http.Handle("/metrics", promhttp.Handler())
+			http.ListenAndServe(":8080", nil)
+			if err := grpcServer.Serve(lis); err != nil {
+				return err
+			}
+			// Wait for go routine ot finish. Need a line of code here for that. 
+			time.Sleep(1 * time.Second)
+			return nil
 	},
 }
-
 
 func init() {
 	rootCmd.AddCommand(serverCmd)

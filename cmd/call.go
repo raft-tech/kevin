@@ -1,27 +1,43 @@
 /*
 Copyright © 2023 Raft LLC
-
 */
 package cmd
 
 import (
 	"fmt"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
 
 var (
-    callAddress string
-    callPort string
+	callAddress string
+	callPort    string
 )
 
 // callCmd represents the call command
 var callCmd = &cobra.Command{
 	Use:   "call",
 	Short: "Use Kevin as a client to call Kevin gRPC services",
-	Long: `A subcommand which prefaces all 'client mode' interactions with Kevin gRPC services`,
+	Long:  `A subcommand which prefaces all 'client mode' interactions with Kevin gRPC services`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Specify a subcommand in order to perform a client call to the desired Kevin gRPC service")
+		return nil
+	},
+}
+
+// metricCmd represents the metric command
+var metricCmd = &cobra.Command{
+	Use:   "metric",
+	Short: "Use Kevin to get metrics based off of the proxy",
+	Long:  `A subcommand which will display all generic prometheus metrics`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		curl := exec.Command("curl", "localhost:8080/metrics")
+		output, err := curl.Output()
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(output)
 		return nil
 	},
 }
@@ -37,6 +53,6 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	callCmd.PersistentFlags().StringVarP(&callAddress, "address", "a", "localhost", "address to dial gRPC services on")
+	callCmd.PersistentFlags().StringVarP(&callAddress, "address", "a", "0.0.0.0", "address to dial gRPC services on")
 	callCmd.PersistentFlags().StringVarP(&callPort, "port", "p", "9000", "port to dial gRPC services on")
 }

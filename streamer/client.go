@@ -43,4 +43,5 @@ func main() {
 
 	<-done //we will wait until all response is received
 	log.Printf("finished")
+
 }
