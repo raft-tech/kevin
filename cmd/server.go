@@ -7,6 +7,7 @@ import (
 	"kevin/pingpong"
 	"kevin/streamer"
 	"net/http"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
@@ -19,6 +20,11 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+func metrics() {
+	http.Handle("/metrics", promhttp.Handler())
+	http.ListenAndServe(":8080", nil)
+}
+
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
@@ -28,6 +34,7 @@ var serverCmd = &cobra.Command{
 Services currently available:
 - pingpong.PongService SayPong
 - streamer.StreamService FetchResponse`,
+
 	RunE: func(cmd *cobra.Command, args []string) error {
 		port, _ := cmd.Flags().GetString("port")
 		log.Printf("starting Kevin gRPC services on port %s...", port)
@@ -39,17 +46,14 @@ Services currently available:
 		pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
 		streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
 		reflection.Register(grpcServer)
-	}
-		// Do a go routine with prometheus metrics 
-		func prometheus () {
-			http.Handle("/metrics", promhttp.Handler())
-			http.ListenAndServe(":8080", nil)
-			if err := grpcServer.Serve(lis); err != nil {
-				return err
-			}
-			// Wait for go routine ot finish. Need a line of code here for that. 
-			time.Sleep(1 * time.Second)
-			return nil
+
+		go metrics()
+
+		if err := grpcServer.Serve(lis); err != nil {
+			return err
+		}
+		time.Sleep(1 * time.Second)
+		return nil
 	},
 }
 

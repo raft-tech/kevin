@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -22,22 +21,6 @@ var callCmd = &cobra.Command{
 	Long:  `A subcommand which prefaces all 'client mode' interactions with Kevin gRPC services`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Specify a subcommand in order to perform a client call to the desired Kevin gRPC service")
-		return nil
-	},
-}
-
-// metricCmd represents the metric command
-var metricCmd = &cobra.Command{
-	Use:   "metric",
-	Short: "Use Kevin to get metrics based off of the proxy",
-	Long:  `A subcommand which will display all generic prometheus metrics`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		curl := exec.Command("curl", "localhost:8080/metrics")
-		output, err := curl.Output()
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(output)
 		return nil
 	},
 }
