@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 	"io"
-	streamer2 "kevin/pkg/streamer"
+	"kevin/pkg/api"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -22,15 +22,10 @@ var (
 // streamerCmd represents the streamer command
 var streamerCmd = &cobra.Command{
 	Use:   "streamer",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "call the PingPong StreamPong gRPC method",
+	Long:  `performs a gRPC client call to the pingpong.PongService's StreamPong method exposed by Kevin running in Server mode`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		log.Println("calling Kevin gRPC method streamer.StreamService FetchResponse...")
+		log.Println("calling Kevin gRPC method pingpong.PongService StreamPong...")
 		// dial server
 		conn, err := grpc.Dial(fmt.Sprintf("%s:%s", callAddress, callPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
@@ -38,9 +33,9 @@ to quickly create a Cobra application.`,
 		}
 
 		// create stream
-		client := streamer2.NewStreamServiceClient(conn)
-		in := &streamer2.Request{Request: streamerReqBody}
-		stream, err := client.FetchResponse(context.Background(), in)
+		client := api.NewPongServiceClient(conn)
+		in := &api.Ping{Ping: streamerReqBody}
+		stream, err := client.StreamPong(context.Background(), in)
 		if err != nil {
 			return err
 		}
@@ -57,7 +52,7 @@ to quickly create a Cobra application.`,
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Println(resp.Result)
+				fmt.Println(resp.Pong)
 			}
 		}()
 
@@ -78,5 +73,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// streamerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	callCmd.PersistentFlags().StringVarP(&streamerReqBody, "body", "b", "Hello World", "body of the request to Streamer service")
+	callCmd.PersistentFlags().StringVarP(&streamerReqBody, "body", "b", "Pong", "body of the request to Streamer service")
 }

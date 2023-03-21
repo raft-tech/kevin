@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"kevin/pkg/pingpong"
+	"kevin/pkg/api"
 )
 
 // pingpongCmd represents the pingpong command
@@ -26,7 +26,7 @@ var pingpongCmd = &cobra.Command{
 func callPingPong(port string, address string) error {
 	fmt.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	client := pingpong.NewPongServiceClient(conn)
+	client := api.NewPongServiceClient(conn)
 	pongResp, err := client.SayPong(context.Background(), &emptypb.Empty{})
 	if err != nil {
 		return err

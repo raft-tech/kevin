@@ -5,8 +5,8 @@ package cmd
 
 import (
 	"kevin/internal"
+	"kevin/pkg/api"
 	"kevin/pkg/pingpong"
-	"kevin/pkg/streamer"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -37,8 +37,7 @@ Services currently available:
 			return err
 		}
 		grpcServer := grpc.NewServer()
-		pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
-		streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
+		api.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
 		reflection.Register(grpcServer)
 
 		go internal.Metrics()
