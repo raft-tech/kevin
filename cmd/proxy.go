@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"kevin/pingpong"
+	"kevin/pkg/pingpong"
 	"net/http"
 
 	"github.com/gorilla/mux"

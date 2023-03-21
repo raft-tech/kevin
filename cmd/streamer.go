@@ -1,23 +1,22 @@
 /*
 Copyright © 2023 Raft LLC
-
 */
 package cmd
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"io"
+	streamer2 "kevin/pkg/streamer"
 	"log"
-    "kevin/streamer"
 
-	"google.golang.org/grpc"
-    "google.golang.org/grpc/credentials/insecure"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
-    streamerReqBody string
+	streamerReqBody string
 )
 
 // streamerCmd represents the streamer command
@@ -32,37 +31,37 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		log.Println("calling Kevin gRPC method streamer.StreamService FetchResponse...")
-        // dial server
-        conn, err := grpc.Dial(fmt.Sprintf("%s:%s", callAddress, callPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
-        if err != nil {
-            return err
-        }
+		// dial server
+		conn, err := grpc.Dial(fmt.Sprintf("%s:%s", callAddress, callPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			return err
+		}
 
-        // create stream
-        client := streamer.NewStreamServiceClient(conn)
-        in := &streamer.Request{Request: streamerReqBody}
-        stream, err := client.FetchResponse(context.Background(), in)
-        if err != nil {
-            return err
-        }
+		// create stream
+		client := streamer2.NewStreamServiceClient(conn)
+		in := &streamer2.Request{Request: streamerReqBody}
+		stream, err := client.FetchResponse(context.Background(), in)
+		if err != nil {
+			return err
+		}
 
-        done := make(chan bool)
+		done := make(chan bool)
 
-        go func() {
-            for {
-                resp, err := stream.Recv()
-                if err == io.EOF {
-                    done <- true //means stream is finished
-                    return
-                }
-                if err != nil {
-                    log.Fatal(err)
-                }
-                fmt.Println(resp.Result)
-            }
-        }()
+		go func() {
+			for {
+				resp, err := stream.Recv()
+				if err == io.EOF {
+					done <- true //means stream is finished
+					return
+				}
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Println(resp.Result)
+			}
+		}()
 
-        <-done //we will wait until all response is received
+		<-done //we will wait until all response is received
 		return nil
 	},
 }

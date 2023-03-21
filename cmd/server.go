@@ -4,8 +4,8 @@ Copyright © 2023 Raft LLC
 package cmd
 
 import (
-	"kevin/pingpong"
-	"kevin/streamer"
+	pingpong2 "kevin/pkg/pingpong"
+	streamer2 "kevin/pkg/streamer"
 	"net/http"
 	"time"
 
@@ -43,8 +43,8 @@ Services currently available:
 			return err
 		}
 		grpcServer := grpc.NewServer()
-		pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
-		streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
+		pingpong2.RegisterPongServiceServer(grpcServer, &pingpong2.Server{})
+		streamer2.RegisterStreamServiceServer(grpcServer, &streamer2.Server{})
 		reflection.Register(grpcServer)
 
 		go metrics()
