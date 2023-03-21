@@ -3,6 +3,7 @@ package pingpong
 import (
 	context "context"
 	"fmt"
+	"kevin/internal"
 	"kevin/pkg/api"
 	"time"
 
@@ -14,6 +15,7 @@ type Server struct {
 }
 
 func (s *Server) SayPong(context.Context, *emptypb.Empty) (*api.Pong, error) {
+	internal.PongCalled.Inc() // increment prom metric
 	return &api.Pong{Pong: "Pong"}, nil
 }
 
@@ -26,5 +28,6 @@ func (s *Server) StreamPong(in *api.Ping, srv api.PongService_StreamPongServer) 
 			fmt.Printf("send error %v", err)
 		}
 	}
+	internal.PongStreamed.Inc() // increment prom metric
 	return nil
 }
