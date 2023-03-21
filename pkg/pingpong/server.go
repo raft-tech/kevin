@@ -12,7 +12,6 @@ type Server struct {
 
 func (S *Server) SayPong(context.Context, *emptypb.Empty) (*Pong, error) {
 	return &Pong{Pong: "Pong"}, nil
-
 }
 
 /// func (S *Server) SayHello(context.Context, *Pong) (*Pong, error) {

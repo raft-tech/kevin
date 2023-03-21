@@ -4,12 +4,11 @@ Copyright © 2023 Raft LLC
 package cmd
 
 import (
-	pingpong2 "kevin/pkg/pingpong"
-	streamer2 "kevin/pkg/streamer"
-	"net/http"
+	"kevin/internal"
+	"kevin/pkg/pingpong"
+	"kevin/pkg/streamer"
 	"time"
 
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 
 	"fmt"
@@ -19,11 +18,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
-
-func metrics() {
-	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":8080", nil)
-}
 
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
@@ -43,11 +37,11 @@ Services currently available:
 			return err
 		}
 		grpcServer := grpc.NewServer()
-		pingpong2.RegisterPongServiceServer(grpcServer, &pingpong2.Server{})
-		streamer2.RegisterStreamServiceServer(grpcServer, &streamer2.Server{})
+		pingpong.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
+		streamer.RegisterStreamServiceServer(grpcServer, &streamer.Server{})
 		reflection.Register(grpcServer)
 
-		go metrics()
+		go internal.Metrics()
 
 		if err := grpcServer.Serve(lis); err != nil {
 			return err

@@ -3,14 +3,13 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"kevin/pkg/pingpong"
-	"net/http"
-
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
+	"kevin/pkg/pingpong"
+	"net/http"
 )
 
 func pingPongHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,12 +58,6 @@ var proxyCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(proxyCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// callCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
+	proxyCmd.PersistentFlags().StringVarP(&callAddress, "address", "a", "kevin-server.kevin.svc.cluster.local", "address to dial gRPC services on")
+	proxyCmd.PersistentFlags().StringVarP(&callPort, "port", "p", "9000", "port to dial gRPC services on")
 }
