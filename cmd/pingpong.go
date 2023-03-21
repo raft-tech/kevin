@@ -4,13 +4,8 @@ Copyright © 2023 Raft LLC
 package cmd
 
 import (
-	"context"
-	"fmt"
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/protobuf/types/known/emptypb"
-	"kevin/pkg/api"
+	"kevin/pkg/pingpong"
 )
 
 // pingpongCmd represents the pingpong command
@@ -19,20 +14,9 @@ var pingpongCmd = &cobra.Command{
 	Short: "call the PingPong SayPong gRPC method",
 	Long:  `performs a gRPC client call to the pingpong.PongService's SayPong method exposed by Kevin running in Server mode`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return callPingPong(callPort, callAddress)
-	},
-}
-
-func callPingPong(port string, address string) error {
-	fmt.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	client := api.NewPongServiceClient(conn)
-	pongResp, err := client.SayPong(context.Background(), &emptypb.Empty{})
-	if err != nil {
+		_, err := pingpong.CallPingPong(callPort, callAddress)
 		return err
-	}
-	fmt.Println(pongResp.Pong)
-	return nil
+	},
 }
 
 func init() {

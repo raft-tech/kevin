@@ -5,8 +5,8 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/spf13/cobra"
+	"kevin/pkg/pingpong"
 )
 
 var (
@@ -36,6 +36,10 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	callCmd.PersistentFlags().StringVarP(&callAddress, "address", "a", "0.0.0.0", "address to dial gRPC services on")
+	callCmd.PersistentFlags().StringVarP(&callAddress, "address", "a", "kevin-server.kevin.svc.cluster.local", "address to dial gRPC services on")
 	callCmd.PersistentFlags().StringVarP(&callPort, "port", "p", "9000", "port to dial gRPC services on")
+	pingpong.ProxyCallAddress = callAddress
+	pingpong.ProxyCallPort = callPort
+	//os.Setenv("PROXY_CALL_ADDRESS", callAddress)
+	//os.Setenv("PROXY_CALL_PORT", callPort)
 }
