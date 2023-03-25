@@ -17,13 +17,7 @@ var (
 	ProxyCallAddress string
 )
 
-//func setProxyVars() {
-//	proxyCallPort = os.Getenv("PROXY_CALL_PORT")
-//	proxyCallAddress = os.Getenv("PROXY_CALL_ADDRESS")
-//}
-
 func (s *ProxyServer) SayPong(context.Context, *emptypb.Empty) (*api.Pong, error) {
-	//setProxyVars()
 	pongResp, err := CallPingPong(ProxyCallPort, ProxyCallAddress)
 	if err != nil {
 		return nil, err
@@ -42,4 +36,12 @@ func (s *ProxyServer) StreamPong(in *api.Ping, srv api.PongService_StreamPongSer
 		}
 	}
 	return nil
+}
+
+func (s *ProxyServer) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
+	writerResp, err := CallWritePong(ProxyCallPort, ProxyCallAddress)
+	if err != nil {
+		return nil, err
+	}
+	return writerResp, nil
 }

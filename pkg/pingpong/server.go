@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"kevin/internal"
 	"kevin/pkg/api"
+	"os"
 	"time"
 
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
@@ -30,4 +31,35 @@ func (s *Server) StreamPong(in *api.Ping, srv api.PongService_StreamPongServer) 
 	}
 	internal.PongStreamed.Inc() // increment prom metric
 	return nil
+}
+
+func (s *Server) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
+	filepath := "./data/kevin-%s.txt"
+	inputFile := fmt.Sprintf(filepath, "input")
+	internal.PongWriter.Inc()
+	internal.WriterBytesRead.Set(0.0)
+	internal.WriterBytesWritten.Set(0.0)
+
+	_, err := os.Stat(inputFile)
+	if err != nil {
+		fmt.Printf("No input file found at %s", inputFile)
+		return nil, err
+	}
+
+	fileBytes, err := os.ReadFile(inputFile)
+	if err != nil {
+		fmt.Printf("Error opening input file %s: %s", inputFile, err)
+		return nil, err
+	}
+	internal.WriterBytesRead.Set(float64(len(fileBytes)))
+
+	outputFile := fmt.Sprintf(filepath, "output")
+	err = os.WriteFile(outputFile, fileBytes, os.FileMode(644))
+	if err != nil {
+		fmt.Printf("Error writing to output file %s: %s", outputFile, err)
+		return nil, err
+	}
+	internal.WriterBytesWritten.Set(float64(len(fileBytes)))
+
+	return &api.Pong{Pong: string(fileBytes)}, nil
 }
