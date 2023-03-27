@@ -12,7 +12,7 @@ import (
 )
 
 func CallPingPong(port string, address string) (*api.Pong, error) {
-	fmt.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
+	log.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	client := api.NewPongServiceClient(conn)
 	pongResp, err := client.SayPong(context.Background(), &emptypb.Empty{})
@@ -39,7 +39,8 @@ func CallStreamPong(port string, address string, streamerReqBody string) error {
 		return err
 	}
 
-	done := make(chan bool)
+	// buffer the channel
+	done := make(chan bool, 1)
 
 	go func() {
 		for {
