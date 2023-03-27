@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"kevin/internal"
 	"kevin/pkg/api"
+	"log"
 	"os"
 	"time"
 
@@ -17,6 +18,7 @@ type Server struct {
 
 func (s *Server) SayPong(context.Context, *emptypb.Empty) (*api.Pong, error) {
 	internal.PongCalled.Inc() // increment prom metric
+	log.Println("Saying Pong")
 	return &api.Pong{Pong: "Pong"}, nil
 }
 
@@ -26,8 +28,9 @@ func (s *Server) StreamPong(in *api.Ping, srv api.PongService_StreamPongServer) 
 		time.Sleep(time.Second)
 		resp := api.Pong{Pong: in.Ping}
 		if err := srv.Send(&resp); err != nil {
-			fmt.Printf("send error %v", err)
+			log.Printf("send error %v", err)
 		}
+		log.Println("Streaming Pong")
 	}
 	internal.PongStreamed.Inc() // increment prom metric
 	return nil
@@ -42,13 +45,13 @@ func (s *Server) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
 
 	_, err := os.Stat(inputFile)
 	if err != nil {
-		fmt.Printf("No input file found at %s", inputFile)
+		log.Printf("No input file found at %s", inputFile)
 		return nil, err
 	}
 
 	fileBytes, err := os.ReadFile(inputFile)
 	if err != nil {
-		fmt.Printf("Error opening input file %s: %s", inputFile, err)
+		log.Printf("Error opening input file %s: %s", inputFile, err)
 		return nil, err
 	}
 	internal.WriterBytesRead.Set(float64(len(fileBytes)))
@@ -56,9 +59,10 @@ func (s *Server) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
 	outputFile := fmt.Sprintf(filepath, "output")
 	err = os.WriteFile(outputFile, fileBytes, os.FileMode(644))
 	if err != nil {
-		fmt.Printf("Error writing to output file %s: %s", outputFile, err)
+		log.Printf("Error writing to output file %s: %s", outputFile, err)
 		return nil, err
 	}
+	log.Printf("Writing to %s", outputFile)
 	internal.WriterBytesWritten.Set(float64(len(fileBytes)))
 
 	return &api.Pong{Pong: string(fileBytes)}, nil
