@@ -4,7 +4,6 @@ Copyright © 2023 Raft LLC
 package cmd
 
 import (
-	"kevin/internal"
 	"kevin/pkg/api"
 	"kevin/pkg/pingpong"
 	"time"
@@ -40,7 +39,7 @@ Services currently available:
 		api.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
 		reflection.Register(grpcServer)
 
-		go internal.Metrics(metricsPort)
+		go pingpong.Metrics(metricsPort, metricsEnabled)
 
 		if err := grpcServer.Serve(lis); err != nil {
 			return err

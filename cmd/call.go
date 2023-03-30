@@ -10,8 +10,10 @@ import (
 )
 
 var (
-	callAddress string
-	callPort    string
+	callAddress  string
+	callPort     string
+	repeats      int
+	delaySeconds int
 )
 
 // callCmd represents the call command
@@ -40,6 +42,9 @@ func init() {
 	callCmd.PersistentFlags().StringVarP(&callPort, "port", "p", "9000", "port to dial gRPC services on")
 	pingpong.ProxyCallAddress = callAddress
 	pingpong.ProxyCallPort = callPort
+
+	callCmd.PersistentFlags().IntVarP(&repeats, "repeats", "r", 1, "number of times to perform a given call operation")
+	callCmd.PersistentFlags().IntVarP(&delaySeconds, "delay", "d", 0, "seconds of delay before next client call")
 	//os.Setenv("PROXY_CALL_ADDRESS", callAddress)
 	//os.Setenv("PROXY_CALL_PORT", callPort)
 }

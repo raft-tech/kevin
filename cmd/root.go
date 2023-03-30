@@ -10,7 +10,8 @@ import (
 )
 
 var (
-	metricsPort string
+	metricsPort    string
+	metricsEnabled bool
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -48,4 +49,5 @@ func init() {
 	// when this action is called directly.
 	// 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.PersistentFlags().StringVarP(&metricsPort, "metrics-port", "m", "8080", "set the port for metrics to be exposed")
+	rootCmd.PersistentFlags().BoolVarP(&metricsEnabled, "metrics-enable", "M", true, "en/disable the reporting of metrics via prometheus")
 }

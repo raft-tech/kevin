@@ -24,7 +24,7 @@ func CallPingPong(port string, address string) (*api.Pong, error) {
 		return nil, err
 	}
 	fmt.Println(pongResp.Pong)
-	PongClientLastDurationSeconds.Set(float64(callstart.Sub(time.Now()).Milliseconds()))
+	PongClientLastDurationSeconds.Set(float64(time.Now().Sub(callstart).Milliseconds()))
 	return pongResp, nil
 }
 
@@ -67,7 +67,7 @@ func CallStreamPong(port string, address string, streamerReqBody string) error {
 	}()
 
 	<-done //we will wait until all response is received
-	PongStreamClientLastDurationSeconds.Set(float64(callstart.Sub(time.Now()).Milliseconds()))
+	PongStreamClientLastDurationSeconds.Set(float64(time.Now().Sub(callstart).Milliseconds()))
 	return nil
 }
 
@@ -83,6 +83,6 @@ func CallWritePong(port string, address string) (*api.Pong, error) {
 		return nil, err
 	}
 	fmt.Println(pongResp.Pong)
-	WriterClientLastDurationSeconds.Set(float64(callstart.Sub(time.Now()).Milliseconds()))
+	WriterClientLastDurationSeconds.Set(float64(time.Now().Sub(callstart).Milliseconds()))
 	return pongResp, nil
 }

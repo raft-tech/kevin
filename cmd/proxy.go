@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"kevin/internal"
 	"kevin/pkg/api"
 	"kevin/pkg/pingpong"
 	"log"
@@ -37,7 +36,7 @@ var proxyCmd = &cobra.Command{
 		api.RegisterPongServiceServer(grpcServer, &pingpong.ProxyServer{})
 		reflection.Register(grpcServer)
 
-		go internal.Metrics(metricsPort)
+		go pingpong.Metrics(metricsPort, metricsEnabled)
 
 		if err := grpcServer.Serve(lis); err != nil {
 			return err
