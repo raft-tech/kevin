@@ -104,6 +104,16 @@ var (
 		Name: "kevin_proxy_writer_errors",
 		Help: "The total number of errors PingPong writer proxy encountered",
 	})
+
+	// Watch Metrics
+	WatchPongHealth = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "kevin_watch_pong_health",
+		Help: "The pong service health as indicated by Watch command. 0 for unhealthy 1 for healthy",
+	})
+	WatchStreamHealth = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "kevin_watch_stream_health",
+		Help: "The stream service health as indicated by Watch command. 0 for unhealthy 1 for healthy",
+	})
 )
 
 func Metrics(port string, enabled bool) {
