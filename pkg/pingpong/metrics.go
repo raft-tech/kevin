@@ -1,11 +1,15 @@
 package pingpong
 
 import (
+	"fmt"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"net/http"
 )
 
 var (
+	// Pong Metrics
 	PongCalled = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "kevin_server_pong_called",
 		Help: "The total number of times PingPong pong service was called",
@@ -23,7 +27,7 @@ var (
 		Help: "The last observed roundtrip duration of a client call to the PingPong pong service",
 	})
 
-	// PongStreamed metrics
+	// Stream Metrics
 	PongStreamed = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "kevin_server_stream_called",
 		Help: "The total number of times PingPong stream service was called",
@@ -45,7 +49,7 @@ var (
 		Help: "The last observed roundtrip duration of a client call of the PingPong stream service",
 	})
 
-	// PongWriter metrics
+	// Writer Metrics
 	PongWriter = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "kevin_server_writer_called",
 		Help: "The total number of times PingPong writer service was called",
@@ -101,3 +105,14 @@ var (
 		Help: "The total number of errors PingPong writer proxy encountered",
 	})
 )
+
+func Metrics(port string, enabled bool) {
+	if !enabled {
+		return
+	}
+	http.Handle("/metrics", promhttp.Handler())
+	err := http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
+	if err != nil {
+		return
+	}
+}
