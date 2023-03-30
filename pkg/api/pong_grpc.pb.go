@@ -25,6 +25,7 @@ const _ = grpc.SupportPackageIsVersion7
 type PongServiceClient interface {
 	SayPong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error)
 	StreamPong(ctx context.Context, in *Ping, opts ...grpc.CallOption) (PongService_StreamPongClient, error)
+	WritePong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error)
 }
 
 type pongServiceClient struct {
@@ -76,12 +77,22 @@ func (x *pongServiceStreamPongClient) Recv() (*Pong, error) {
 	return m, nil
 }
 
+func (c *pongServiceClient) WritePong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*Pong, error) {
+	out := new(Pong)
+	err := c.cc.Invoke(ctx, "/pingpong.PongService/WritePong", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PongServiceServer is the server API for PongService service.
 // All implementations must embed UnimplementedPongServiceServer
 // for forward compatibility
 type PongServiceServer interface {
 	SayPong(context.Context, *emptypb.Empty) (*Pong, error)
 	StreamPong(*Ping, PongService_StreamPongServer) error
+	WritePong(context.Context, *emptypb.Empty) (*Pong, error)
 	mustEmbedUnimplementedPongServiceServer()
 }
 
@@ -94,6 +105,9 @@ func (UnimplementedPongServiceServer) SayPong(context.Context, *emptypb.Empty) (
 }
 func (UnimplementedPongServiceServer) StreamPong(*Ping, PongService_StreamPongServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamPong not implemented")
+}
+func (UnimplementedPongServiceServer) WritePong(context.Context, *emptypb.Empty) (*Pong, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WritePong not implemented")
 }
 func (UnimplementedPongServiceServer) mustEmbedUnimplementedPongServiceServer() {}
 
@@ -147,6 +161,24 @@ func (x *pongServiceStreamPongServer) Send(m *Pong) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _PongService_WritePong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PongServiceServer).WritePong(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pingpong.PongService/WritePong",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PongServiceServer).WritePong(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PongService_ServiceDesc is the grpc.ServiceDesc for PongService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -157,6 +189,10 @@ var PongService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SayPong",
 			Handler:    _PongService_SayPong_Handler,
+		},
+		{
+			MethodName: "WritePong",
+			Handler:    _PongService_WritePong_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

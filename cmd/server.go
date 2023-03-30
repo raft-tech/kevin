@@ -4,7 +4,6 @@ Copyright © 2023 Raft LLC
 package cmd
 
 import (
-	"kevin/internal"
 	"kevin/pkg/api"
 	"kevin/pkg/pingpong"
 	"time"
@@ -31,7 +30,7 @@ Services currently available:
 
 	RunE: func(cmd *cobra.Command, args []string) error {
 		port, _ := cmd.Flags().GetString("port")
-		log.Printf("starting Kevin gRPC services on port %s...", port)
+		log.Printf("starting Kevin gRPC services at localhost:%s", port)
 		lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 		if err != nil {
 			return err
@@ -40,7 +39,7 @@ Services currently available:
 		api.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
 		reflection.Register(grpcServer)
 
-		go internal.Metrics()
+		go pingpong.Metrics(metricsPort, metricsEnabled)
 
 		if err := grpcServer.Serve(lis); err != nil {
 			return err
