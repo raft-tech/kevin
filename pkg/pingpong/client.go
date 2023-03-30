@@ -17,6 +17,10 @@ func CallPingPong(port string, address string) (*api.Pong, error) {
 	log.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
 	PongClientCalled.Inc()
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		PongClientErrors.Inc()
+		return nil, err
+	}
 	client := api.NewPongServiceClient(conn)
 	pongResp, err := client.SayPong(context.Background(), &emptypb.Empty{})
 	if err != nil {
@@ -76,6 +80,10 @@ func CallWritePong(port string, address string) (*api.Pong, error) {
 	WriterClientCalled.Inc()
 	fmt.Println("calling Kevin gRPC method pingpong.PongService WritePong...")
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		PongWriterClientErrors.Inc()
+		return nil, err
+	}
 	client := api.NewPongServiceClient(conn)
 	pongResp, err := client.WritePong(context.Background(), &emptypb.Empty{})
 	if err != nil {
