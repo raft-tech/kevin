@@ -1,6 +1,5 @@
 /*
 Copyright © 2023 Raft LLC
-
 */
 package cmd
 
@@ -10,7 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
+var (
+	metricsPort    string
+	metricsEnabled bool
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -45,7 +47,7 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-// 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().StringVarP(&metricsPort, "metrics-port", "m", "8080", "set the port for metrics to be exposed")
+	rootCmd.PersistentFlags().BoolVarP(&metricsEnabled, "metrics-enable", "M", true, "en/disable the reporting of metrics via prometheus")
 }
-
-
