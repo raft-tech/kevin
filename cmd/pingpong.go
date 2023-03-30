@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"kevin/internal"
 	"kevin/pkg/pingpong"
 )
 
@@ -14,6 +15,7 @@ var pingpongCmd = &cobra.Command{
 	Short: "call the PingPong SayPong gRPC method",
 	Long:  `performs a gRPC client call to the pingpong.PongService's SayPong method exposed by Kevin running in Server mode`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		go internal.Metrics(metricsPort)
 		_, err := pingpong.CallPingPong(callPort, callAddress)
 		return err
 	},

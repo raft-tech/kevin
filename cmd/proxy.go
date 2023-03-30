@@ -37,7 +37,7 @@ var proxyCmd = &cobra.Command{
 		api.RegisterPongServiceServer(grpcServer, &pingpong.ProxyServer{})
 		reflection.Register(grpcServer)
 
-		go internal.Metrics()
+		go internal.Metrics(metricsPort)
 
 		if err := grpcServer.Serve(lis); err != nil {
 			return err

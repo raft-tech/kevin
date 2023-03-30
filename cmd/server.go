@@ -40,7 +40,7 @@ Services currently available:
 		api.RegisterPongServiceServer(grpcServer, &pingpong.Server{})
 		reflection.Register(grpcServer)
 
-		go internal.Metrics()
+		go internal.Metrics(metricsPort)
 
 		if err := grpcServer.Serve(lis); err != nil {
 			return err
