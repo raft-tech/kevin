@@ -3,7 +3,6 @@ package pingpong
 import (
 	context "context"
 	"fmt"
-	"kevin/internal"
 	"kevin/pkg/api"
 	"log"
 	"os"
@@ -17,7 +16,7 @@ type Server struct {
 }
 
 func (s *Server) SayPong(context.Context, *emptypb.Empty) (*api.Pong, error) {
-	internal.PongCalled.Inc() // increment prom metric
+	PongCalled.Inc() // increment prom metric
 	log.Println("Saying Pong")
 	return &api.Pong{Pong: "Pong"}, nil
 }
@@ -32,16 +31,16 @@ func (s *Server) StreamPong(in *api.Ping, srv api.PongService_StreamPongServer) 
 		}
 		log.Println("Streaming Pong")
 	}
-	internal.PongStreamed.Inc() // increment prom metric
+	PongStreamed.Inc() // increment prom metric
 	return nil
 }
 
 func (s *Server) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
 	filepath := "./data/kevin-%s.txt"
 	inputFile := fmt.Sprintf(filepath, "input")
-	internal.PongWriter.Inc()
-	internal.WriterBytesRead.Set(0.0)
-	internal.WriterBytesWritten.Set(0.0)
+	PongWriter.Inc()
+	WriterBytesRead.Set(0.0)
+	WriterBytesWritten.Set(0.0)
 
 	_, err := os.Stat(inputFile)
 	if err != nil {
@@ -54,7 +53,7 @@ func (s *Server) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
 		log.Printf("Error opening input file %s: %s", inputFile, err)
 		return nil, err
 	}
-	internal.WriterBytesRead.Set(float64(len(fileBytes)))
+	WriterBytesRead.Set(float64(len(fileBytes)))
 
 	outputFile := fmt.Sprintf(filepath, "output")
 	err = os.WriteFile(outputFile, fileBytes, os.FileMode(644))
@@ -63,7 +62,7 @@ func (s *Server) WritePong(context.Context, *emptypb.Empty) (*api.Pong, error) {
 		return nil, err
 	}
 	log.Printf("Writing to %s", outputFile)
-	internal.WriterBytesWritten.Set(float64(len(fileBytes)))
+	WriterBytesWritten.Set(float64(len(fileBytes)))
 
 	return &api.Pong{Pong: string(fileBytes)}, nil
 }
