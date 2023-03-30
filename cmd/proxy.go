@@ -28,7 +28,7 @@ var proxyCmd = &cobra.Command{
 		log.Printf("starting Kevin gRPC proxy on port %s...", port)
 		pingpong.ProxyCallAddress = proxyAddress
 		pingpong.ProxyCallPort = proxyPort
-		fmt.Printf("the proxy address: %s\n the proxy port: %s", pingpong.ProxyCallAddress, pingpong.ProxyCallPort)
+		log.Printf("the proxy address: %s\nthe proxy port: %s\n", pingpong.ProxyCallAddress, pingpong.ProxyCallPort)
 		lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 		if err != nil {
 			return err

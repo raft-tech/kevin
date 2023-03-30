@@ -12,7 +12,7 @@ import (
 )
 
 func CallPingPong(port string, address string) (*api.Pong, error) {
-	fmt.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
+	log.Println("calling Kevin gRPC method pingpong.PongService SayPong...")
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	client := api.NewPongServiceClient(conn)
 	pongResp, err := client.SayPong(context.Background(), &emptypb.Empty{})
@@ -39,7 +39,8 @@ func CallStreamPong(port string, address string, streamerReqBody string) error {
 		return err
 	}
 
-	done := make(chan bool)
+	// buffer the channel
+	done := make(chan bool, 1)
 
 	go func() {
 		for {
@@ -57,4 +58,16 @@ func CallStreamPong(port string, address string, streamerReqBody string) error {
 
 	<-done //we will wait until all response is received
 	return nil
+}
+
+func CallWritePong(port string, address string) (*api.Pong, error) {
+	fmt.Println("calling Kevin gRPC method pingpong.PongService WritePong...")
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", address, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	client := api.NewPongServiceClient(conn)
+	pongResp, err := client.WritePong(context.Background(), &emptypb.Empty{})
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(pongResp.Pong)
+	return pongResp, nil
 }

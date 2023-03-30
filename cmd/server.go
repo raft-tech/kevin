@@ -31,7 +31,7 @@ Services currently available:
 
 	RunE: func(cmd *cobra.Command, args []string) error {
 		port, _ := cmd.Flags().GetString("port")
-		log.Printf("starting Kevin gRPC services on port %s...", port)
+		log.Printf("starting Kevin gRPC services at localhost:%s", port)
 		lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 		if err != nil {
 			return err
