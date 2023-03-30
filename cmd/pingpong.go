@@ -18,10 +18,12 @@ var pingpongCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		go pingpong.Metrics(metricsPort, metricsEnabled)
 		for i := 0; i < repeats; i++ {
-			_, err := pingpong.CallPingPong(callPort, callAddress)
-			if err != nil {
-				log.Println(err)
-			}
+			go func() {
+				_, err := pingpong.CallPingPong(callPort, callAddress)
+				if err != nil {
+					log.Println(err)
+				}
+			}()
 			time.Sleep(time.Duration(delaySeconds) * time.Second)
 		}
 		return nil

@@ -22,9 +22,12 @@ var streamerCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		go pingpong.Metrics(metricsPort, metricsEnabled)
 		for i := 0; i < repeats; i++ {
-			if err := pingpong.CallStreamPong(callPort, callAddress, streamerReqBody); err != nil {
-				log.Println(err)
-			}
+			go func() {
+				err := pingpong.CallStreamPong(callPort, callAddress, streamerReqBody)
+				if err != nil {
+					log.Println(err)
+				}
+			}()
 			time.Sleep(time.Duration(delaySeconds) * time.Second)
 		}
 		return nil
